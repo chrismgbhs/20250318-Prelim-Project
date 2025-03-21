@@ -27,6 +27,9 @@ namespace _20250318_Prelim_Project
             bool backToSourceInput = true;
             bool checkSourceTower = true;
             bool moveValues = true;
+            bool sourceParsed;
+            bool targetParsed;
+            
 
             // SETTING THE NUMBER OF DISKS
             while (disksInput < 3 || disksInput > 10)
@@ -81,10 +84,6 @@ namespace _20250318_Prelim_Project
 
             while (doLoop)
             {
-                sourceTower = -1;
-                targetTower = -1;
-                checkSourceTower = true;
-
                 Console.WriteLine($"Move counter: {moveCounter}");
                 Console.WriteLine();
 
@@ -93,11 +92,51 @@ namespace _20250318_Prelim_Project
                 {
                     for (int towerCounter = 0; towerCounter < towers.Length; towerCounter++)
                     {
+                        switch (towers[towerCounter][towerRows])
+                        {
+                            case 0:
+                                Console.ForegroundColor = ConsoleColor.White;
+                                break;
+                            case 1:
+                                Console.ForegroundColor = ConsoleColor.White;
+                                break;
+                            case 2:
+                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                break;
+                            case 3:
+                                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                break;
+                            case 4:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 5:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                break;
+                            case 6:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                break;
+                            case 7:
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                break;
+                            case 8:
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                break;
+                            case 9:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 10:
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                break;
+                            case 11:
+                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                break;
+                        }
                         Console.Write($"\t{discs[towers[towerCounter][towerRows]]}");
                     }
                     Console.WriteLine();
                 }
 
+                Console.ResetColor();
                 Console.WriteLine($"\t-0-\t-1-\t-2-");
 
                 if (moveCounter == 0)
@@ -107,9 +146,13 @@ namespace _20250318_Prelim_Project
                                       "\nRemember! You can't put a disk of higher value on top of a disk with lower value!" +
                                       "\nReady? Press any key to start!");
                     Console.ReadKey();
-                }               
+                }
 
-                // GETTING THE INPUT FOR TARGET TOWER
+                sourceTower = -1;
+                targetTower = -1;
+                checkSourceTower = true;
+
+                // GETTING THE INPUT FOR TARGET TOWER AND SOURCE TOWER
                 while (targetTower < 0 || targetTower > towers.Length - 1)
                 {
                     backToSourceInput = true;
@@ -117,9 +160,9 @@ namespace _20250318_Prelim_Project
                     {
                         backToSourceInput = false;
                         Console.WriteLine("From which tower will the disk be coming from? Only input 0, 1 or 2.");
-                        int.TryParse(Console.ReadLine(), out sourceTower);
+                        sourceParsed = int.TryParse(Console.ReadLine(), out sourceTower);
 
-                        if (sourceTower < 0 || sourceTower > towers.Length - 1)
+                        if (sourceParsed == false || sourceTower < 0 || sourceTower > towers.Length - 1)
                         {
                             Console.WriteLine("Invalid input.");
                             backToSourceInput = true;
@@ -135,12 +178,13 @@ namespace _20250318_Prelim_Project
                         }
                     }
 
-                    Console.WriteLine("To which tower will the disk be goint to? Only input 0, 1, or 2.");
-                    int.TryParse(Console.ReadLine(), out targetTower);
+                    Console.WriteLine("To which tower will the disk be going to? Only input 0, 1, or 2.");
+                    targetParsed = int.TryParse(Console.ReadLine(), out targetTower);
 
-                    if (targetTower < 0 || targetTower > towers.Length - 1)
+                    if (targetParsed == false || targetTower < 0 || targetTower > towers.Length - 1)
                     {
                         Console.WriteLine("Invalid input.");
+                        targetTower = -1; 
                     }
 
                     else
@@ -190,11 +234,47 @@ namespace _20250318_Prelim_Project
                     {
                         for (int towerCounter = 0; towerCounter < towers.Length; towerCounter++)
                         {
+                            switch (towers[towerCounter][towerRows])
+                            {
+                                case 0:
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    break;
+                                case 1:
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    break;
+                                case 2:
+                                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                    break;
+                                case 3:
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    break;
+                                case 4:
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    break;
+                                case 5:
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    break;
+                                case 6:
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    break;
+                                case 7:
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    break;
+                                case 8:
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    break;
+                                case 9:
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    break;
+                                case 10:
+                                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                    break;
+                            }
                             Console.Write($"\t{discs[towers[towerCounter][towerRows]]}");
                         }
                         Console.WriteLine();
                     }
-
+                    Console.ResetColor();
                     Console.WriteLine($"\t-0-\t-1-\t-2-");
 
                     accuracy = (desiredMoves / moveCounter) * 100;
