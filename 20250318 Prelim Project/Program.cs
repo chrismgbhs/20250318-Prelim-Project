@@ -197,15 +197,6 @@ namespace _20250318_Prelim_Project
 
                     Console.WriteLine($"\t-0-\t-1-\t-2-");
 
-                    if (moveCounter == 0)
-                    {
-                        Console.WriteLine("Welcome to the Tower of Hanoi!" +
-                                          "\nYour goal is to move all the 'Disks' from tower 0 to tower 2." +
-                                          "\nRemember! You can't put a disk of higher value on top of a disk with lower value!" +
-                                          "\nReady? Press any key to start!");
-                        Console.ReadKey();
-                    }
-
                     accuracy = (desiredMoves / moveCounter) * 100;
                     Console.WriteLine($"Congratulations! You have completed the tower! {moveCounter} out of {desiredMoves}! {accuracy}% accuracy!!");
                     doLoop = false;
