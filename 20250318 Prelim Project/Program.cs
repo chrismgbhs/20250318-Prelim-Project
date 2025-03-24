@@ -18,6 +18,7 @@ namespace _20250318_Prelim_Project
 
             int sourceTower;
             int targetTower;
+            int disksInputFirstHolder;
             int disksInput = 0;
             double moveCounter = 0;
             double desiredMoves = 2;
@@ -25,21 +26,38 @@ namespace _20250318_Prelim_Project
 
             bool doLoop = true;
             bool backToSourceInput = true;
-            bool checkSourceTower = true;
-            bool moveValues = true;
-            bool sourceParsed;
             bool targetParsed;
             bool gameCompleted = false;
             
 
             // SETTING THE NUMBER OF DISKS
-            while (disksInput < 3 || disksInput > 10)
+            while (disksInput == 0)
             {
                 Console.WriteLine("\tPlease enter how many disks you would like to play with.");
                 Console.Write("\t");
-                int.TryParse(Console.ReadLine(), out disksInput);
 
-                if (disksInput < 3 || disksInput > 10)
+                if (int.TryParse(Console.ReadLine(), out disksInputFirstHolder)) 
+                {
+                    if (disksInputFirstHolder < 3)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("\tThe number of disks cannot be less than 3.");
+                    }
+
+                    else if (disksInputFirstHolder > 10)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("\tThe number of disks cannot be greater than 10.");
+                    }
+
+                    else 
+                    { 
+                        disksInput = disksInputFirstHolder;
+                    }
+                    
+                }
+
+                else
                 {
                     Console.WriteLine();
                     Console.WriteLine("\tYour input must be a number (3-10).");
@@ -87,7 +105,7 @@ namespace _20250318_Prelim_Project
             while (doLoop)
             {
                 Console.WriteLine();
-                Console.WriteLine($"\tMove counter: {moveCounter}");
+                Console.WriteLine($"\tMove Counter : {moveCounter}");
                 Console.WriteLine();
 
                 // PRINTING OF TOWERS
@@ -96,6 +114,7 @@ namespace _20250318_Prelim_Project
                     Console.Write("\t");
                     for (int towerCounter = 0; towerCounter < towers.Length; towerCounter++)
                     {
+                        // COLORING OF DISKS
                         switch (towers[towerCounter][towerRows])
                         {
                             case 0:
@@ -105,7 +124,7 @@ namespace _20250318_Prelim_Project
                                 Console.ForegroundColor = ConsoleColor.White;
                                 break;
                             case 2:
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 break;
                             case 3:
                                 Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -117,7 +136,7 @@ namespace _20250318_Prelim_Project
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 break;
                             case 6:
-                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.ForegroundColor = ConsoleColor.Yellow;
                                 break;
                             case 7:
                                 Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -132,7 +151,7 @@ namespace _20250318_Prelim_Project
                                 Console.ForegroundColor = ConsoleColor.DarkRed;
                                 break;
                             case 11:
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 break;
                         }
                         Console.Write($"\t{discs[towers[towerCounter][towerRows]]}");
@@ -143,6 +162,7 @@ namespace _20250318_Prelim_Project
                 Console.ResetColor();
                 Console.WriteLine($"\t\t-0-\t-1-\t-2-");
 
+                // GAME COMPLETION
                 if (gameCompleted == true)
                 {
                     accuracy = (desiredMoves / moveCounter) * 100;
@@ -150,6 +170,7 @@ namespace _20250318_Prelim_Project
                     doLoop = false;
                 }
 
+                // WELCOME MESSAGE
                 if (moveCounter == 0)
                 {
                     Console.WriteLine("\tWelcome to the Tower of Hanoi!" +
@@ -160,14 +181,14 @@ namespace _20250318_Prelim_Project
                     Console.ReadKey();
                 }
 
+                // GAMEPLAY
                 if (gameCompleted == false) 
                 {
-                    sourceTower = -1;
+                    sourceTower = 0;
                     targetTower = -1;
-                    checkSourceTower = true;
 
                     // GETTING THE INPUT FOR TARGET TOWER AND SOURCE TOWER
-                    while (targetTower < 0 || targetTower > towers.Length - 1)
+                    while (targetTower < 0)
                     {
                         backToSourceInput = true;
                         while (backToSourceInput)
@@ -176,14 +197,21 @@ namespace _20250318_Prelim_Project
                             Console.WriteLine();
                             Console.WriteLine("\tFrom which tower will the disk be coming from? Only input 0, 1 or 2.");
                             Console.Write("\t");
-                            sourceParsed = int.TryParse(Console.ReadLine(), out sourceTower);
 
-                            if (sourceParsed == false || sourceTower < 0 || sourceTower > towers.Length - 1)
+                            if (!int.TryParse(Console.ReadLine(), out sourceTower))
+                            {
+                                backToSourceInput = true;
+                            }
+
+                            if (backToSourceInput || sourceTower < 0 || sourceTower > towers.Length - 1)
                             {
                                 Console.WriteLine("\tInvalid input.");
                                 backToSourceInput = true;
                             }
 
+                            /* I HAVE ADDED ELSE HERE TO PREVENT THIS FROM RUNNING IF THE TOWER SOURCE IS ALREADY INVALID AND TO 
+                             * ALSO AVOID INDEX OUT OF BOUNDS ERROR 
+                             */
                             else
                             {
                                 if (towerFilledSlotsCounter[sourceTower] == 0)
@@ -194,6 +222,7 @@ namespace _20250318_Prelim_Project
                             }
                         }
 
+                        // GETTING THE INPUT FOR TARGET TOWER
                         Console.WriteLine("\tTo which tower will the disk be going to? Only input 0, 1, or 2.");
                         Console.Write("\t");
                         targetParsed = int.TryParse(Console.ReadLine(), out targetTower);
@@ -212,41 +241,31 @@ namespace _20250318_Prelim_Project
                                 targetTower = -1;
                             }
 
-                            else if (towerFilledSlotsCounter[targetTower] == disksInput)
+                            else if (towerUnfilledSlotsCounter[targetTower] != disksInput)
                             {
-                                Console.WriteLine("\tThe tower is already filled!");
-                                targetTower = -1;
+                                    if (towers[sourceTower][towerUnfilledSlotsCounter[sourceTower] + 2] > towers[targetTower][towerUnfilledSlotsCounter[targetTower] + 2])
+                                    {
+                                        Console.WriteLine("\tThe disk that is going to move has a higher value than the disk it is going on top of.");
+                                        targetTower = -1;
+                                    }
                             }
                         }
                     }
 
-                    Console.Clear(); 
+                    Console.Clear();
 
-                    moveValues = true;
-                    if (towerUnfilledSlotsCounter[targetTower] != disksInput)
-                    {
-                        if (towers[sourceTower][towerUnfilledSlotsCounter[sourceTower] + 2] > towers[targetTower][towerUnfilledSlotsCounter[targetTower] + 2])
-                        {
-                            moveValues = false;
-                            Console.WriteLine("\tThe disk that is going to move has a higher value than the disk it is going on top of.");
-                        }
-                    }
-
-                    if (moveValues)
-                    {
-                        towers[targetTower][towerUnfilledSlotsCounter[targetTower] - 1 + 2] = towers[sourceTower][(disksInput + 2) - towerFilledSlotsCounter[sourceTower]];
-                        towers[sourceTower][(disksInput + 2) - towerFilledSlotsCounter[sourceTower]] = 0;
-                        towerFilledSlotsCounter[sourceTower]--; towerUnfilledSlotsCounter[sourceTower]++;
-                        towerFilledSlotsCounter[targetTower]++; towerUnfilledSlotsCounter[targetTower]--;
-                        moveCounter++;
-                    }
+                    // MOVING OF DISKS
+                    towers[targetTower][towerUnfilledSlotsCounter[targetTower] - 1 + 2] = towers[sourceTower][(disksInput + 2) - towerFilledSlotsCounter[sourceTower]];
+                    towers[sourceTower][(disksInput + 2) - towerFilledSlotsCounter[sourceTower]] = 0;
+                    towerFilledSlotsCounter[sourceTower]--; towerUnfilledSlotsCounter[sourceTower]++;
+                    towerFilledSlotsCounter[targetTower]++; towerUnfilledSlotsCounter[targetTower]--;
+                    moveCounter++;
 
                     if (towerFilledSlotsCounter[2] == disksInput)
                     {
                         gameCompleted = true;
                     }
                 }
-                
             }
         }
     }
