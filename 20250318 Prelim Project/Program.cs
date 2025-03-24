@@ -220,6 +220,8 @@ namespace _20250318_Prelim_Project
                         }
                     }
 
+                    Console.Clear(); 
+
                     moveValues = true;
                     if (towerUnfilledSlotsCounter[targetTower] != disksInput)
                     {
@@ -243,7 +245,8 @@ namespace _20250318_Prelim_Project
                     {
                         gameCompleted = true;
                     }
-                }                         
+                }
+                
             }
         }
     }
